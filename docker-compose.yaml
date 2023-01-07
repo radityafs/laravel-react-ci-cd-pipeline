@@ -18,6 +18,8 @@ services:
       - ./app_backend:/var/www/backend
       - ./config/php/local.ini:/usr/local/etc/php/conf.d/local.ini
     tty: true
+    port:
+      - "9000:9000"
     depends_on:
       - db
     networks:
