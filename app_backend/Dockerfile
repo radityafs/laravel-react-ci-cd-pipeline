@@ -1,7 +1,3 @@
-### Composer ###
-ENV USER=www
-ENV GROUP=www
-
 # Install composer
 FROM composer:latest AS composer
 
@@ -63,16 +59,16 @@ RUN chmod +x /usr/local/bin/install-php-extensions && \
 WORKDIR /var/www/
 
 # Create User and Group
-RUN groupadd -g 1000 ${GROUP} && useradd -u 1000 -ms /bin/bash -g ${GROUP} ${USER}
+RUN groupadd -g 1000 www && useradd -u 1000 -ms /bin/bash -g www www
 
 # Grant Permissions
-RUN chown -R ${USER} /var/www
+RUN chown -R www /var/www
 
 # Select User
-USER ${USER}
+USER www
 
 # Copy permission to selected user
-COPY --chown=${USER}:${GROUP} . .
+COPY --chown=www:www . .
 
 EXPOSE 9000
 
