@@ -9,9 +9,15 @@ services:
       - app-network
 
   backend:
+    container_name: backend
+    working_dir: /var/www
     build:
       context: ./app_backend
       dockerfile: Dockerfile
+    volumes:
+      - ./app_backend:/var/www/backend
+      - ./config/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    tty: true
     depends_on:
       - db
     networks:
