@@ -1,13 +1,12 @@
 ### Composer ###
+ENV USER=www
+ENV GROUP=www
 
 # Install composer
 FROM composer:latest AS composer
 
-COPY . ./app/backend
+COPY . /app/backend
 WORKDIR /app/backend
-
-## show files
-RUN ls -la
 
 RUN composer install --no-dev --no-scripts --no-autoloader --no-interaction --ignore-platform-reqs
 
@@ -60,20 +59,21 @@ RUN chmod +x /usr/local/bin/install-php-extensions && \
     soap \
     zip
 
-# Add user for laravel application
-RUN groupadd -g 1000 www
-RUN useradd -u 1000 -ms /bin/bash -g www www
+# Setup working directory
+WORKDIR /var/www/
 
-# Copy existing application directory contents
-COPY . /var/www/backend
+# Create User and Group
+RUN groupadd -g 1000 ${GROUP} && useradd -u 1000 -ms /bin/bash -g ${GROUP} ${USER}
 
-# Copy existing application directory permissions
-COPY --chown=www:www . /var/www
+# Grant Permissions
+RUN chown -R ${USER} /var/www
 
-# Change current user to www
-USER www
+# Select User
+USER ${USER}
 
-# Expose port 9000 and start php-fpm server
+# Copy permission to selected user
+COPY --chown=${USER}:${GROUP} . .
+
 EXPOSE 9000
-CMD ["php-fpm"]
 
+CMD ["php-fpm"]
