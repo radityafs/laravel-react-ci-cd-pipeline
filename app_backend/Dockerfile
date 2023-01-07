@@ -59,7 +59,7 @@ RUN chmod +x /usr/local/bin/install-php-extensions && \
 WORKDIR /var/www/
 
 # Create User and Group
-RUN groupadd -g 1000 www && useradd -u 1000 -ms /bin/bash -g www www
+RUN addgroup -g 1000 www && adduser -u 1000 -ms /bin/bash -g www www
 
 # Grant Permissions
 RUN chown -R www /var/www
