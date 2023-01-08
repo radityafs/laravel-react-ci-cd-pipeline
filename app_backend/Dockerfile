@@ -2,7 +2,7 @@
 FROM composer:latest AS composer
 
 COPY . /app/backend
-WORKDIR /app/backend
+WORKDIR /app/backend 
 
 RUN composer install --no-dev --no-scripts --no-autoloader --no-interaction --ignore-platform-reqs
 
@@ -55,14 +55,16 @@ RUN chmod +x /usr/local/bin/install-php-extensions && \
     soap \
     zip
 
+COPY . /usr/share/nginx/backend
+
 # Setup working directory
-WORKDIR /var/www/
+WORKDIR /usr/share/nginx
 
 # Create User and Group
 RUN addgroup -g 1000 -S www && adduser -u 1000 -S www -G www
 
 # Grant Permissions
-RUN chown -R www /var/www
+RUN chown -R www /usr/share/nginx
 
 # Select User
 USER www

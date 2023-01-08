@@ -10,12 +10,12 @@ services:
 
   backend:
     container_name: backend
-    working_dir: /var/www
+    working_dir: /usr/share/nginx
     build:
       context: ./app_backend
       dockerfile: Dockerfile
     volumes:
-      - ./app_backend:/var/www/backend
+      - ./app_backend:/usr/share/nginx/backend
       - ./config/php/local.ini:/usr/local/etc/php/conf.d/local.ini
     tty: true
     ports:
@@ -29,7 +29,7 @@ services:
     image: mysql:5.7
     restart: unless-stopped
     ports:
-      - "3306:3306"
+      - "3305:3306"
     tty: true
     environment:
       MYSQL_ROOT_PASSWORD: root
@@ -60,7 +60,7 @@ services:
     image: nginx:latest
     restart: unless-stopped
     ports:
-      - "80:80"
+      - "81:81"
     volumes:
       - ./app_frontend/build:/usr/share/nginx/frontend
       - ./app_backend:/usr/share/nginx/backend
