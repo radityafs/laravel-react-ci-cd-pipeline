@@ -15,7 +15,7 @@ services:
       context: ./app_backend
       dockerfile: Dockerfile
     volumes:
-      - ./app_backend:/usr/share/nginx/backend
+      - ./config/backend/.env:/app/.env
       - ./config/php/local.ini:/usr/local/etc/php/conf.d/local.ini
     tty: true
     ports:
@@ -33,11 +33,11 @@ services:
     tty: true
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: backend
-      MYSQL_USER: test
-      MYSQL_PASSWORD: test
+      MYSQL_DATABASE: production
+      MYSQL_USER: production
+      MYSQL_PASSWORD: production123
     volumes:
-      - ./db:/docker-entrypoint-initdb.d
+      - ./db_prod:/var/lib/mysql
     networks:
       - app-network
 
@@ -48,9 +48,9 @@ services:
       - "8080:80"
     environment:
       PMA_HOST: db
-      PMA_PORT: 3306
-      PMA_USER: test
-      PMA_PASSWORD: test
+      PMA_PORT: 3305
+      PMA_USER: production
+      PMA_PASSWORD: production123
     networks:
       - app-network
     depends_on:
