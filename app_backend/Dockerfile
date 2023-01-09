@@ -1,77 +1,29 @@
-# Install composer
-FROM composer:latest AS composer
-
-COPY . /app/backend
-WORKDIR /app/backend 
-
-RUN composer install --no-dev --no-scripts --no-autoloader --no-interaction --ignore-platform-reqs
-
-### PHP ###
-
 # Install PHP
-FROM php:8.1-fpm-alpine AS php
+FROM php:8.1-alpine AS php
 
-# Add docker-php-extension-installer script
-ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+# copy only composer.json and composer.lock
+COPY composer.* /app/backend/
 
-# Install dependencies
-RUN apk add --no-cache \
-    bash \
-    curl \
-    freetype-dev \
-    g++ \
-    gcc \
-    git \
-    icu-dev \
-    icu-libs \
-    libc-dev \
-    libzip-dev \
-    make \
-    mysql-client \
-    nodejs \
-    npm \
-    oniguruma-dev \
-    yarn \
-    openssh-client \
-    postgresql-libs \
-    rsync \
-    zlib-dev
+# set working directory
+WORKDIR /app/backend
 
-# Install php extensions
-RUN chmod +x /usr/local/bin/install-php-extensions && \
-    install-php-extensions \
-    @composer \
-    redis-stable \
-    imagick-stable \
-    xdebug-stable \
-    bcmath \
-    calendar \
-    exif \
-    gd \
-    intl \
-    pdo_mysql \
-    pdo_pgsql \
-    pcntl \
-    soap \
-    zip
+# install composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-COPY . /usr/share/nginx/backend
+# install dependencies
+RUN composer install --no-dev --no-scripts --no-autoloader
 
-# Setup working directory
-WORKDIR /usr/share/nginx
+# copy the rest of the files
+COPY . /app/backend/
 
-# Create User and Group
-RUN addgroup -g 1000 -S www && adduser -u 1000 -S www -G www
+# run composer dump-autoload
+RUN composer dump-autoload --optimize
 
-# Grant Permissions
-RUN chown -R www /usr/share/nginx
+# User and group www-data
+RUN addgroup -g 1000 www && adduser -u 1000 -G www -s /bin/sh -D www
 
-# Select User
-USER www
+# Change Storage Permission
+RUN chmod -R 777 /app/backend/storage
 
-# Copy permission to selected user
-COPY --chown=www:www . .
-
-EXPOSE 9000
-
-CMD ["php-fpm"]
+# Change Permission
+RUN chown -R www:www /app/backend
