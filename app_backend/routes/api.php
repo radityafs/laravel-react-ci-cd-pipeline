@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MovieController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,11 +20,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-Route::get('/', function () {
-    return 'test';
-});
-
-
-Route::get('/test', function () {
-    return 'test';
-});
+Route::get('/movie/trending', [MovieController::class, 'index']);
