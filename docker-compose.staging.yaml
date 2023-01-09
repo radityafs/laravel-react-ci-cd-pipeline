@@ -10,7 +10,7 @@ services:
     depends_on:
       - db-staging
     volumes:
-      - backend:/app/backend
+      - backend-staging:/app/backend
       - ./config/backend/.env.staging:/app/backend/.env
     networks:
       - app-network-staging
@@ -21,7 +21,7 @@ services:
       context: ./app_frontend
       dockerfile: Dockerfile
     volumes:
-      - frontend:/app/frontend
+      - frontend-staging:/app/frontend
     networks:
       - app-network-staging
 
