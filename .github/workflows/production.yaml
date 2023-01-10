@@ -12,6 +12,8 @@ jobs:
       - uses: actions/checkout@v3
       - name: "Go to Backend Project"
         run: "cd ./app_backend"
+      - name: "Set Up App Key"
+        run: "cp .env.example .env && php artisan key:generate"
       - name: "Install Composer Dependencies"
         run: "composer install --no-interaction --no-progress --no-suggest --no-scripts --no-dev --optimize-autoloader"
       - name: "Run PHPUnit Tests"
