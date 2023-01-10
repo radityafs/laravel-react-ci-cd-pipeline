@@ -10,29 +10,31 @@ jobs:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v3
-      - name: "Go to Backend Project"
-        run: "cd ./app_backend"
       - name: "Set Up App Key"
-        run: "cp .env.example .env && php artisan key:generate"
-      - name: "Install Composer Dependencies"
-        run: "composer install --no-interaction --no-progress --no-suggest --no-scripts --no-dev --optimize-autoloader"
-      - name: "Run PHPUnit Tests"
-        run: "vendor/bin/phpunit /tests"
-      - name: "Upload Coverage Report"
-        uses: codecov/codecov-action@v1
+        working_dir: "./app_backend"
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+      - name: "Testing Project"
+        working_dir: "./app_backend"
+        run: |
+          composer install
+          php artisan test
 
   Test_Frontend:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v3
-      - run: "cd ./app_frontend"
       - uses: actions/setup-node@v2
         with:
           node-version: "16"
-      - run: npm install
-      - run: npm run test
-      - name: "Upload Coverage Report"
-        uses: codecov/codecov-action@v1
+      - name: "Install Dependencies"
+        working_dir: "./app_frontend"
+      - name: "Testing Project"
+        working_dir: "./app_frontend"
+        run: |
+          npm install
+          npm run test
 
   Deploy:
     needs: [Test_Backend, Test_Frontend]
