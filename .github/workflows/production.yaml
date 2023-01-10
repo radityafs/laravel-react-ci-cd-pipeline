@@ -13,8 +13,7 @@ jobs:
       - name: "Go to Backend Project"
         run: "cd ./app_backend"
       - name: "Install Composer Dependencies"
-        run: |
-        composer install --no-scripts
+        run: "composer install --no-interaction --no-progress --no-suggest --no-scripts --no-dev --optimize-autoloader"
       - name: "Run PHPUnit Tests"
         run: "vendor/bin/phpunit /tests"
       - name: "Upload Coverage Report"
