@@ -1,0 +1,40 @@
+name: Staging Pipeline
+
+on:
+  push:
+    branches:
+      - staging
+
+jobs:
+  Test Backend:
+    runs-on: self-host
+    steps:
+      - uses: actions/checkout@v3
+      - run: "cd ./app_backend"
+      - uses: php-actions/composer@v6
+        with:
+          args: install
+      - uses: php-actions/phpunit@v7
+        with:
+          args: --coverage-clover=coverage.xml
+      - uses: codecov/codecov-action@v1
+
+  Test Frontend:
+    runs-on: self-host
+    steps:
+      - uses: actions/checkout@v3
+      - run: "cd ./app_frontend"
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "16"
+      - run: npm install
+      - run: npm run test
+
+  Deploy:
+    needs: [Test Backend, Test Frontend]
+    runs-on: self-host
+    steps:
+      - name: Stop Docker Containers
+        run: docker-compose -f docker-compose.staging.yaml down -v --rmi local
+      - name: Build Docker Containers
+        run: docker-compose -f docker-compose.staging.yaml build
