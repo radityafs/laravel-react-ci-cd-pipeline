@@ -10,16 +10,19 @@ jobs:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v3
-      - name: "Set Up App Key"
+      - name: "Install Composer Dependency"
+        working_dir: "./app_backend"
+        uses: php-actions/composer@v6
+        with:
+          args: install
+      - name: "Set Up Environtment"
         working_dir: "./app_backend"
         run: |
           cp .env.example .env
           php artisan key:generate
-
       - name: "Testing Project"
         working_dir: "./app_backend"
         run: |
-          composer install
           php artisan test
 
   Test_Frontend:
