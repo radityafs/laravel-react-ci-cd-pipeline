@@ -31,7 +31,7 @@ jobs:
       - run: npm run test
 
   Deploy:
-    needs: [Test Backend, Test Frontend]
+    needs: [Test_Backend, Test_Frontend]
     runs-on: self-hosted
     steps:
       - name: Stop Docker Containers
