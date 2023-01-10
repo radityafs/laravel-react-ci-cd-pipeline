@@ -13,17 +13,32 @@ jobs:
         working-directory: ./app_backend
     steps:
       - uses: actions/checkout@v3
-      - name: "Show ls"
-        run: "ls -la"
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: composer-${{ hashFiles('composer.lock') }}
+
       - name: "Install Composer Dependency"
         uses: "php-actions/composer@v6"
         with:
           php_version: "8.1"
           working_dir: ./app_backend
+
       - name: "Generate .env file"
-        run: "cp .env.example .env && php artisan key:generate"
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
       - name: "Testing Project"
         run: "php artisan test"
+
+      - name: "Save Test Results"
+        uses: actions/upload-artifact@v3
+        with:
+          name: "backend-test-results"
+          path: ./app_backend/test-result.log
 
   Test_Frontend:
     runs-on: self-hosted
@@ -35,8 +50,16 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: "16"
+
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node-${{ hashFiles('package-lock.json') }}
+
       - name: "Install Dependencies"
         run: "npm install"
+
       - name: "Testing Project"
         run: "npm run test"
 

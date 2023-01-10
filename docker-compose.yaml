@@ -21,7 +21,7 @@ services:
       dockerfile: Dockerfile
       args:
         - REACT_APP_MODE=production
-        - REACT_APP_API=http://app.production:8480/
+        - REACT_APP_API=http://app.production:8480/api
     volumes:
       - frontend:/app/frontend
     networks:

@@ -8,31 +8,60 @@ on:
 jobs:
   Test_Backend:
     runs-on: self-hosted
+    defaults:
+      run:
+        working-directory: ./app_backend
     steps:
       - uses: actions/checkout@v3
-      - name: "Go to Backend Project"
-        run: "cd ./app_backend"
-      - name: "Install Composer"
-        uses: php-actions/composer@v6
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v3
         with:
-          args: install
-      - name: "Run PHPUnit Tests"
-        run: "vendor/bin/phpunit /tests"
-      - name: "Upload Coverage Report"
-        uses: codecov/codecov-action@v1
+          path: vendor
+          key: composer-${{ hashFiles('composer.lock') }}
+
+      - name: "Install Composer Dependency"
+        uses: "php-actions/composer@v6"
+        with:
+          php_version: "8.1"
+          working_dir: ./app_backend
+
+      - name: "Generate .env file"
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: "Testing Project"
+        run: "php artisan test"
+
+      - name: "Save Test Results"
+        uses: actions/upload-artifact@v3
+        with:
+          name: "backend-test-results"
+          path: ./app_backend/test-result.log
 
   Test_Frontend:
     runs-on: self-hosted
+    defaults:
+      run:
+        working-directory: ./app_frontend
     steps:
       - uses: actions/checkout@v3
-      - run: "cd ./app_frontend"
       - uses: actions/setup-node@v2
         with:
           node-version: "16"
-      - run: npm install
-      - run: npm run test
-      - name: "Upload Coverage Report"
-        uses: codecov/codecov-action@v1
+
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node-${{ hashFiles('package-lock.json') }}
+
+      - name: "Install Dependencies"
+        run: "npm install"
+
+      - name: "Testing Project"
+        run: "npm run test"
 
   Deploy:
     needs: [Test_Backend, Test_Frontend]
@@ -41,4 +70,4 @@ jobs:
       - name: Stop Docker Containers
         run: docker-compose -f docker-compose.staging.yaml down -v --rmi local
       - name: Build Docker Containers
-        run: docker-compose -f docker-compose.staging.yaml build
+        run: docker-compose -f docker-compose.staging.yaml up -d
