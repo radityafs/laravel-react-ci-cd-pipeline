@@ -16,7 +16,7 @@ jobs:
       - name: "Show ls"
         run: "ls -la"
       - name: "Install Composer Dependency"
-        run: "composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev"
+        uses: "php-actions/composer@v6"
       - name: "Generate .env file"
         run: "cp .env.example .env && php artisan key:generate"
       - name: "Testing Project"
