@@ -11,14 +11,14 @@ jobs:
     defaults:
       run:
         working-directory: ./app_backend
-      uses:
-        working-directory: ./app_backend
     steps:
       - uses: actions/checkout@v3
       - name: "Show ls"
         run: "ls -la"
       - name: "Install Composer Dependency"
         uses: "php-actions/composer@v6"
+        with:
+          working_dir: ./app_backend
       - name: "Generate .env file"
         run: "cp .env.example .env && php artisan key:generate"
       - name: "Testing Project"
