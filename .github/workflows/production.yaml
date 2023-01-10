@@ -47,4 +47,4 @@ jobs:
       - name: Stop Docker Containers
         run: docker-compose -f docker-compose.yaml down -v --rmi local
       - name: Build Docker Containers
-        run: docker-compose -f docker-compose.yaml build
+        run: docker-compose -f docker-compose.yaml up -d
