@@ -18,7 +18,6 @@ jobs:
       - name: "Show ls"
         run: "ls -la"
       - name: "Install Composer Dependency"
-        working-directory: ./app_backend
         uses: "php-actions/composer@v6"
       - name: "Generate .env file"
         run: "cp .env.example .env && php artisan key:generate"
