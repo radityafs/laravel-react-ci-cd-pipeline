@@ -13,10 +13,10 @@ jobs:
         working-directory: ./app_backend
     steps:
       - uses: actions/checkout@v3
+      - name: "Show ls"
+        run: "ls -la"
       - name: "Install Composer Dependency"
-        uses: php-actions/composer@v6
-        with:
-          args: install
+        uses: "composer install --no-interaction --prefer-dist --optimize-autoloader"
       - name: "Set Up Environtment"
         run: "cp .env.example .env && php artisan key:generate"
       - name: "Testing Project"
