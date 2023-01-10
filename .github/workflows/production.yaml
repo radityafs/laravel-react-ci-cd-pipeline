@@ -31,11 +31,10 @@ jobs:
           node-version: "16"
       - name: "Install Dependencies"
         working_dir: "./app_frontend"
+        run: "npm install"
       - name: "Testing Project"
         working_dir: "./app_frontend"
-        run: |
-          npm install
-          npm run test
+        run: "npm run test"
 
   Deploy:
     needs: [Test_Backend, Test_Frontend]
