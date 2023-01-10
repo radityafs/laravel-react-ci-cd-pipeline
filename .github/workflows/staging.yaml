@@ -6,7 +6,7 @@ on:
       - staging
 
 jobs:
-  Test Backend:
+  Test_Backend:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v3
@@ -19,7 +19,7 @@ jobs:
           args: --coverage-clover=coverage.xml
       - uses: codecov/codecov-action@v1
 
-  Test Frontend:
+  Test_Frontend:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v3
