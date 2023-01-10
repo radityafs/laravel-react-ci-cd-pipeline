@@ -11,6 +11,8 @@ jobs:
     defaults:
       run:
         working-directory: ./app_backend
+      uses:
+        working-directory: ./app_backend
     steps:
       - uses: actions/checkout@v3
       - name: "Show ls"
