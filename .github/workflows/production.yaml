@@ -17,13 +17,10 @@ jobs:
           args: install
       - name: "Set Up Environtment"
         working_dir: "./app_backend"
-        run: |
-          cp .env.example .env
-          php artisan key:generate
+        run: "cp .env.example .env && php artisan key:generate"
       - name: "Testing Project"
         working_dir: "./app_backend"
-        run: |
-          php artisan test
+        run: "php artisan test"
 
   Test_Frontend:
     runs-on: self-hosted
