@@ -17,7 +17,7 @@ jobs:
       - name: Cache composer dependencies
         uses: actions/cache@v3
         with:
-          path: vendor
+          path: ./app_backend/vendor
           key: composer-${{ hashFiles('composer.lock') }}
 
       - name: "Install Composer Dependency"
@@ -54,7 +54,7 @@ jobs:
       - name: Cache node modules
         uses: actions/cache@v3
         with:
-          path: node_modules
+          path: ./app_frontend/node_modules
           key: node-${{ hashFiles('package-lock.json') }}
 
       - name: "Install Dependencies"
