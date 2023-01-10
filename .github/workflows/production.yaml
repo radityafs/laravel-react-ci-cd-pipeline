@@ -18,6 +18,7 @@ jobs:
       - name: "Install Composer Dependency"
         uses: "php-actions/composer@v6"
         with:
+          php_version: "8.1"
           working_dir: ./app_backend
       - name: "Generate .env file"
         run: "cp .env.example .env && php artisan key:generate"
