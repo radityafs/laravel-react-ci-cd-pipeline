@@ -24,7 +24,6 @@ services:
         - REACT_APP_API=http://app.staging:8480/api
     volumes:
       - frontend-staging:/app/frontend
-      - ./config/frontend/.env.staging:/app/frontend/.env
     networks:
       - app-network-staging
 

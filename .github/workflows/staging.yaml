@@ -38,7 +38,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: "backend-test-results"
-          path: ./app_backend/test-result.log
+          path: ./test-result.log
 
   Test_Frontend:
     runs-on: self-hosted
@@ -69,5 +69,7 @@ jobs:
     steps:
       - name: Stop Docker Containers
         run: docker-compose -f docker-compose.staging.yaml down -v --rmi local
+        continue-on-error: true
+
       - name: Build Docker Containers
         run: docker-compose -f docker-compose.staging.yaml up -d

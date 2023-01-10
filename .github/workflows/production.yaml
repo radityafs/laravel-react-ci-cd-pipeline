@@ -69,5 +69,7 @@ jobs:
     steps:
       - name: Stop Docker Containers
         run: docker-compose -f docker-compose.yaml down -v --rmi local
+        continue-on-error: true
+
       - name: Build Docker Containers
         run: docker-compose -f docker-compose.yaml up -d
