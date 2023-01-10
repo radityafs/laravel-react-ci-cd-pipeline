@@ -3,7 +3,7 @@ name: Production Pipeline
 on:
   push:
     branches:
-      - staging
+      - production
 
 jobs:
   Test_Backend:
