@@ -11,15 +11,15 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: "Install Composer Dependency"
-        working_directory: "./app_backend"
+        working_directory: ./app_backend
         uses: php-actions/composer@v6
         with:
           args: install
       - name: "Set Up Environtment"
-        working_directory: "./app_backend"
+        working_directory: ./app_backend
         run: "cp .env.example .env && php artisan key:generate"
       - name: "Testing Project"
-        working_directory: "./app_backend"
+        working_directory: ./app_backend
         run: "php artisan test"
 
   Test_Frontend:
@@ -30,10 +30,10 @@ jobs:
         with:
           node-version: "16"
       - name: "Install Dependencies"
-        working_directory: "./app_frontend"
+        working_directory: ./app_frontend
         run: "npm install"
       - name: "Testing Project"
-        working_directory: "./app_frontend"
+        working_directory: ./app_frontend
         run: "npm run test"
 
   Deploy:
